@@ -44,7 +44,7 @@ export default function NotificationBanner(props: BannerProps) {
   return (
     <Banner {...props} isVisible={isActive}>
       <BannerContainer>{props.children}</BannerContainer>
-      <StyledClose size={16} onClick={() => setIsActive(false)} />
+      <StyledClose size={24} onClick={() => setIsActive(false)} />
     </Banner>
   )
 }
