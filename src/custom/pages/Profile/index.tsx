@@ -86,7 +86,12 @@ export default function Profile() {
                   🧑‍🌾
                 </span>
                 <strong>{formatInt(profileData?.totalTrades)}</strong>
-                <span>Total trades</span>
+                <span>
+                  Total trades
+                  <MouseoverTooltipContent content="You may see more trades here that what you see in the activity list. To understand why, check out the FAQ.">
+                    <HelpCircle size={14} />
+                  </MouseoverTooltipContent>
+                </span>
               </FlexCol>
               <FlexCol>
                 <span role="img" aria-label="moneybag">
