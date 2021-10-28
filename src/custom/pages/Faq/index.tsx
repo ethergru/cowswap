@@ -745,6 +745,44 @@ export default function Faq() {
         */}
         </Content>
       </Page>
+      <Page>
+        <Content>
+          <h2 id="stats-from-blockchain">Stats from Blockchain</h2>
+
+          <h3 id="why-do-i-see-more-trades">
+            Why do I see more trades in my profile page than I actually see in the activity list?
+          </h3>
+
+          <p>The number of trades on the profile page is calculated based on blockchain data.</p>
+          <p>We have two publicly facing interfaces where both use the same contracts, which are:</p>
+          <ul>
+            <li>
+              The production version:{' '}
+              <ExternalLink href="https://cowswap.exchange" target="_blank" rel="noopener noreferrer">
+                <strong>https://cowswap.exchange</strong>
+              </ExternalLink>
+            </li>
+            <li>
+              The public test version:{' '}
+              <ExternalLink href="https://barn.cowswap.exchange" target="_blank" rel="noopener noreferrer">
+                <strong>https://barn.cowswap.exchange</strong>
+              </ExternalLink>
+            </li>
+          </ul>
+          <p>
+            Even though both use the same contract, the backend services are different, and the data is stored in
+            isolated databases. Thus, when accessing{' '}
+            <ExternalLink href="https://cowswap.exchange" target="_blank" rel="noopener noreferrer">
+              <strong>https://cowswap.exchange</strong>
+            </ExternalLink>{' '}
+            you&apos;ll see orders/trades placed only using this interface. The same is true for orders/trades placed on
+            <ExternalLink href="https://barn.cowswap.exchange" target="_blank" rel="noopener noreferrer">
+              <strong>https://barn.cowswap.exchange</strong>
+            </ExternalLink>
+            . If you ever traded on both, you might have more trades than you would expect.
+          </p>
+        </Content>
+      </Page>
     </Wrapper>
   )
 }
