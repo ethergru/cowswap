@@ -40,7 +40,7 @@ export const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-top: 120px;
+  padding-top: 80px;
   align-items: center;
   flex: 1;
   overflow-y: auto;

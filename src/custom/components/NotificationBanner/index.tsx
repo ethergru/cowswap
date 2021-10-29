@@ -13,9 +13,11 @@ export interface BannerProps {
 }
 
 const Banner = styled.div<Pick<BannerProps, 'isVisible' | 'level'>>`
-  width: 100%;
+  width: 50%;
   min-height: 40px;
-  padding: 6px 6px;
+  padding: 8px;
+  border-radius: 12px;
+  margin: 0 0 16px 0;
   background-color: ${({ theme, level }) => theme[level]};
   color: ${({ theme, level }) => theme[`${level}Text` as keyof Colors]};
   font-size: 16px;
@@ -26,6 +28,7 @@ const Banner = styled.div<Pick<BannerProps, 'isVisible' | 'level'>>`
 
   @media screen and (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
     font-size: 12px;
+    width: 100%;
   }
 `
 
