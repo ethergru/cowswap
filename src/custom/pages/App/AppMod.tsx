@@ -116,13 +116,13 @@ export default function App(props?: { children?: ReactNode }) {
         <Web3ReactManager>
           <AppWrapper bgBlur={bgBlur}>
             <Popups />
-            <AffiliateStatusCheck />
             <URLWarning />
             <HeaderWrapper>
               <Header />
             </HeaderWrapper>
             <BodyWrapper>
               <Polling />
+              <AffiliateStatusCheck />
               {/* <TopLevelModals /> */}
               <ReferralLinkUpdater />
               <Switch>
