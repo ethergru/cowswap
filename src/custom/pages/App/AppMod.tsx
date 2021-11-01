@@ -85,13 +85,14 @@ const HeaderWrapper = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
   justify-content: space-between;
+  z-index: 3;
 `
 const StatusWrapper = styled.div`
   display: flex;
   justify-content: center;
   position: absolute;
   width: 100%;
-  margin: 100px 0 0 0;
+  margin: 110px 0 0 0;
   z-index: 2;
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
