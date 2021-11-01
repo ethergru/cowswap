@@ -86,6 +86,20 @@ const HeaderWrapper = styled.div`
   width: 100%;
   justify-content: space-between;
 `
+const StatusWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  margin: 100px 0 0 0;
+  z-index: 2;
+
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    position: relative;
+    margin: 0;
+    padding: 8px 12px;
+  `};
+`
 const FooterWrapper = styled(HeaderWrapper)`
   z-index: 1;
   width: auto;
@@ -120,9 +134,11 @@ export default function App(props?: { children?: ReactNode }) {
             <HeaderWrapper>
               <Header />
             </HeaderWrapper>
+            <StatusWrapper>
+              <AffiliateStatusCheck />
+            </StatusWrapper>
             <BodyWrapper>
               <Polling />
-              <AffiliateStatusCheck />
               {/* <TopLevelModals /> */}
               <ReferralLinkUpdater />
               <Switch>
