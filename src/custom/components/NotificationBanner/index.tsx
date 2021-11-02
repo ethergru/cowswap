@@ -30,6 +30,7 @@ const Banner = styled.div<Pick<BannerProps, 'isVisible' | 'level'>>`
   @media screen and (max-width: ${MEDIA_WIDTHS.upToSmall}px) {
     font-size: 12px;
     width: 100%;
+    text-align: center;
   }
 `
 
