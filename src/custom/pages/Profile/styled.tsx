@@ -3,6 +3,9 @@ import Page, { GdocsListStyle, Title } from 'components/Page'
 import * as CSS from 'csstype'
 import { transparentize } from 'polished'
 
+export const Container = styled.div`
+  max-width: 910px;
+`
 export const Wrapper = styled(Page)`
   ${GdocsListStyle}
 

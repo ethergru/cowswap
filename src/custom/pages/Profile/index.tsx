@@ -3,6 +3,7 @@ import {
   FlexCol,
   FlexWrap,
   Wrapper,
+  Container,
   GridWrap,
   CardHead,
   StyledTitle,
@@ -21,6 +22,7 @@ import useTimeAgo from 'hooks/useTimeAgo'
 import { MouseoverTooltipContent } from 'components/Tooltip'
 import NotificationBanner from 'components/NotificationBanner'
 import { SupportedChainId as ChainId } from 'constants/chains'
+import AffiliateStatusCheck from 'components/AffiliateStatusCheck'
 
 export default function Profile() {
   const referralLink = useReferralLink()
@@ -29,113 +31,116 @@ export default function Profile() {
   const lastUpdated = useTimeAgo(profileData?.lastUpdated)
 
   return (
-    <Wrapper>
-      <GridWrap>
-        <CardHead>
-          <StyledTitle>Profile overview</StyledTitle>
-          {account && (
-            <Txt>
-              <RefreshCcw size={16} />
-              &nbsp;&nbsp;
-              <Txt secondary>
-                Last updated
-                <MouseoverTooltipContent content="Data is updated on the background periodically.">
-                  <HelpCircle size={14} />
-                </MouseoverTooltipContent>
-                :&nbsp;
+    <Container>
+      <AffiliateStatusCheck />
+      <Wrapper>
+        <GridWrap>
+          <CardHead>
+            <StyledTitle>Profile overview</StyledTitle>
+            {account && (
+              <Txt>
+                <RefreshCcw size={16} />
+                &nbsp;&nbsp;
+                <Txt secondary>
+                  Last updated
+                  <MouseoverTooltipContent content="Data is updated on the background periodically.">
+                    <HelpCircle size={14} />
+                  </MouseoverTooltipContent>
+                  :&nbsp;
+                </Txt>
+                {!lastUpdated ? (
+                  '-'
+                ) : (
+                  <MouseoverTooltipContent content={<TimeFormatted date={profileData?.lastUpdated} />}>
+                    <strong>{lastUpdated}</strong>
+                  </MouseoverTooltipContent>
+                )}
               </Txt>
-              {!lastUpdated ? (
-                '-'
+            )}
+          </CardHead>
+          {chainId && chainId !== ChainId.MAINNET && (
+            <NotificationBanner isVisible level="info" canClose={false}>
+              Profile data is only available for mainnet. Please change the network to see it.
+            </NotificationBanner>
+          )}
+          <ChildWrapper>
+            <Txt fs={16}>
+              <strong>Your referral url</strong>
+            </Txt>
+            <Txt fs={14} center>
+              {referralLink ? (
+                <>
+                  <span style={{ wordBreak: 'break-all', display: 'inline-block' }}>
+                    {referralLink.prefix}
+                    <strong>{referralLink.address}</strong>
+                    <span style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 8 }}>
+                      <Copy toCopy={referralLink.link} />
+                    </span>
+                  </span>
+                </>
               ) : (
-                <MouseoverTooltipContent content={<TimeFormatted date={profileData?.lastUpdated} />}>
-                  <strong>{lastUpdated}</strong>
-                </MouseoverTooltipContent>
+                '-'
               )}
             </Txt>
-          )}
-        </CardHead>
-        {chainId && chainId !== ChainId.MAINNET && (
-          <NotificationBanner isVisible level="info" canClose={false}>
-            Profile data is only available for mainnet. Please change the network to see it.
-          </NotificationBanner>
-        )}
-        <ChildWrapper>
-          <Txt fs={16}>
-            <strong>Your referral url</strong>
-          </Txt>
-          <Txt fs={14} center>
-            {referralLink ? (
-              <>
-                <span style={{ wordBreak: 'break-all', display: 'inline-block' }}>
-                  {referralLink.prefix}
-                  <strong>{referralLink.address}</strong>
-                  <span style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 8 }}>
-                    <Copy toCopy={referralLink.link} />
+          </ChildWrapper>
+          <GridWrap horizontal>
+            <ChildWrapper>
+              <ItemTitle>
+                Trades&nbsp;
+                <MouseoverTooltipContent content="Statistics regarding your own trades.">
+                  <HelpCircle size={14} />
+                </MouseoverTooltipContent>
+              </ItemTitle>
+              <FlexWrap className="item">
+                <FlexCol>
+                  <span role="img" aria-label="farmer">
+                    🧑‍🌾
                   </span>
-                </span>
-              </>
-            ) : (
-              '-'
-            )}
-          </Txt>
-        </ChildWrapper>
-        <GridWrap horizontal>
-          <ChildWrapper>
-            <ItemTitle>
-              Trades&nbsp;
-              <MouseoverTooltipContent content="Statistics regarding your own trades.">
-                <HelpCircle size={14} />
-              </MouseoverTooltipContent>
-            </ItemTitle>
-            <FlexWrap className="item">
-              <FlexCol>
-                <span role="img" aria-label="farmer">
-                  🧑‍🌾
-                </span>
-                <strong>{formatInt(profileData?.totalTrades)}</strong>
-                <span>Total trades</span>
-              </FlexCol>
-              <FlexCol>
-                <span role="img" aria-label="moneybag">
-                  💰
-                </span>
-                <strong>{formatDecimal(profileData?.tradeVolumeUsd)}</strong>
-                <span>Total traded volume</span>
-              </FlexCol>
+                  <strong>{formatInt(profileData?.totalTrades)}</strong>
+                  <span>Total trades</span>
+                </FlexCol>
+                <FlexCol>
+                  <span role="img" aria-label="moneybag">
+                    💰
+                  </span>
+                  <strong>{formatDecimal(profileData?.tradeVolumeUsd)}</strong>
+                  <span>Total traded volume</span>
+                </FlexCol>
+              </FlexWrap>
+            </ChildWrapper>
+            <ChildWrapper>
+              <ItemTitle>
+                Referrals&nbsp;
+                <MouseoverTooltipContent content="Statistics regarding trades by people who used your referral link.">
+                  <HelpCircle size={14} />
+                </MouseoverTooltipContent>
+              </ItemTitle>
+              <FlexWrap className="item">
+                <FlexCol>
+                  <span role="img" aria-label="handshake">
+                    🤝
+                  </span>
+                  <strong>{formatInt(profileData?.totalReferrals)}</strong>
+                  <span>Total referrals</span>
+                </FlexCol>
+                <FlexCol>
+                  <span role="img" aria-label="wingedmoney">
+                    💸
+                  </span>
+                  <strong>{formatDecimal(profileData?.referralVolumeUsd)}</strong>
+                  <span>Referrals volume</span>
+                </FlexCol>
+              </FlexWrap>
+            </ChildWrapper>
+          </GridWrap>
+          {!account && (
+            <FlexWrap>
+              <Web3Status openOrdersPanel={() => console.log('TODO')} />
             </FlexWrap>
-          </ChildWrapper>
-          <ChildWrapper>
-            <ItemTitle>
-              Referrals&nbsp;
-              <MouseoverTooltipContent content="Statistics regarding trades by people who used your referral link.">
-                <HelpCircle size={14} />
-              </MouseoverTooltipContent>
-            </ItemTitle>
-            <FlexWrap className="item">
-              <FlexCol>
-                <span role="img" aria-label="handshake">
-                  🤝
-                </span>
-                <strong>{formatInt(profileData?.totalReferrals)}</strong>
-                <span>Total referrals</span>
-              </FlexCol>
-              <FlexCol>
-                <span role="img" aria-label="wingedmoney">
-                  💸
-                </span>
-                <strong>{formatDecimal(profileData?.referralVolumeUsd)}</strong>
-                <span>Referrals volume</span>
-              </FlexCol>
-            </FlexWrap>
-          </ChildWrapper>
+          )}
         </GridWrap>
-        {!account && (
-          <FlexWrap>
-            <Web3Status openOrdersPanel={() => console.log('TODO')} />
-          </FlexWrap>
-        )}
-      </GridWrap>
-    </Wrapper>
+      </Wrapper>
+    </Container>
   )
 }
 

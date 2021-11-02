@@ -6,6 +6,9 @@ import styled, { css } from 'styled-components/macro'
 import { Text } from 'rebass'
 import { AutoColumn } from '../Column'
 
+export const Container = styled.div`
+  max-width: 460px;
+`
 export const Wrapper = styled.div`
   position: relative;
   padding: 8px;

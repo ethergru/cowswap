@@ -35,8 +35,6 @@ import VotePage from './Vote/VotePage'
 */
 import ReferralLinkUpdater from 'state/affiliate/updater'
 import URLWarning from 'components/Header/URLWarning'
-import AffiliateStatusCheck from 'components/AffiliateStatusCheck'
-
 import Footer from 'components/Footer'
 import { BodyWrapper } from '.'
 import * as CSS from 'csstype' // mod
@@ -85,22 +83,8 @@ const HeaderWrapper = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
   justify-content: space-between;
-  z-index: 3;
 `
-const StatusWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  width: 100%;
-  margin: 110px 0 0 0;
-  z-index: 2;
 
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    position: relative;
-    margin: 0;
-    padding: 8px 12px;
-  `};
-`
 const FooterWrapper = styled(HeaderWrapper)`
   z-index: 1;
   width: auto;
@@ -135,9 +119,6 @@ export default function App(props?: { children?: ReactNode }) {
             <HeaderWrapper>
               <Header />
             </HeaderWrapper>
-            <StatusWrapper>
-              <AffiliateStatusCheck />
-            </StatusWrapper>
             <BodyWrapper>
               <Polling />
               {/* <TopLevelModals /> */}

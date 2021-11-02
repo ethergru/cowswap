@@ -14,7 +14,7 @@ export interface BannerProps {
 }
 
 const Banner = styled.div<Pick<BannerProps, 'isVisible' | 'level'>>`
-  width: 77%;
+  width: 100%;
   min-height: 40px;
   padding: 8px;
   border-radius: 12px;
@@ -50,7 +50,7 @@ export default function NotificationBanner(props: BannerProps) {
   return (
     <Banner {...props} isVisible={isActive}>
       <BannerContainer>{props.children}</BannerContainer>
-      {canClose && <StyledClose size={16} onClick={() => setIsActive(false)} />}
+      {canClose && <StyledClose size={24} onClick={() => setIsActive(false)} />}
     </Banner>
   )
 }
