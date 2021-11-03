@@ -1,3 +1,4 @@
+import styled, { css } from 'styled-components/macro'
 import { Txt } from 'assets/styles/styled'
 import {
   FlexCol,
@@ -24,9 +25,26 @@ import { SupportedChainId as ChainId } from 'constants/chains'
 
 export default function Profile() {
   const referralLink = useReferralLink()
+  const { profileData, isLoading, error } = useFetchProfile()
   const { account, chainId } = useActiveWeb3React()
-  const profileData = useFetchProfile()
   const lastUpdated = useTimeAgo(profileData?.lastUpdated)
+
+  const renderNotificationMessages = () => {
+    return (
+      <>
+        {error && (
+          <NotificationBanner isVisible level="error" canClose={false}>
+            There was an error loading your profile data. Please try again later.
+          </NotificationBanner>
+        )}
+        {chainId && chainId !== ChainId.MAINNET && (
+          <NotificationBanner isVisible level="info" canClose={false}>
+            Profile data is only available for mainnet. Please change the network to see it.
+          </NotificationBanner>
+        )}
+      </>
+    )
+  }
 
   return (
     <Wrapper>
@@ -34,31 +52,29 @@ export default function Profile() {
         <CardHead>
           <StyledTitle>Profile overview</StyledTitle>
           {account && (
-            <Txt>
-              <RefreshCcw size={16} />
-              &nbsp;&nbsp;
-              <Txt secondary>
-                Last updated
-                <MouseoverTooltipContent content="Data is updated on the background periodically.">
-                  <HelpCircle size={14} />
-                </MouseoverTooltipContent>
-                :&nbsp;
+            <Loader isLoading={isLoading}>
+              <Txt>
+                <RefreshCcw size={16} />
+                &nbsp;&nbsp;
+                <Txt secondary>
+                  Last updated
+                  <MouseoverTooltipContent content="Data is updated on the background periodically.">
+                    <HelpCircle size={14} />
+                  </MouseoverTooltipContent>
+                  :&nbsp;
+                </Txt>
+                {!lastUpdated ? (
+                  '-'
+                ) : (
+                  <MouseoverTooltipContent content={<TimeFormatted date={profileData?.lastUpdated} />}>
+                    <strong>{lastUpdated}</strong>
+                  </MouseoverTooltipContent>
+                )}
               </Txt>
-              {!lastUpdated ? (
-                '-'
-              ) : (
-                <MouseoverTooltipContent content={<TimeFormatted date={profileData?.lastUpdated} />}>
-                  <strong>{lastUpdated}</strong>
-                </MouseoverTooltipContent>
-              )}
-            </Txt>
+            </Loader>
           )}
         </CardHead>
-        {chainId && chainId !== ChainId.MAINNET && (
-          <NotificationBanner isVisible level="info" canClose={false}>
-            Profile data is only available for mainnet. Please change the network to see it.
-          </NotificationBanner>
-        )}
+        {renderNotificationMessages()}
         <ChildWrapper>
           <Txt fs={16}>
             <strong>Your referral url</strong>
@@ -93,14 +109,18 @@ export default function Profile() {
                   🧑‍🌾
                 </span>
                 <strong>{formatInt(profileData?.totalTrades)}</strong>
-                <span>Total trades</span>
+                <Loader isLoading={isLoading}>
+                  <span>Total trades</span>
+                </Loader>
               </FlexCol>
               <FlexCol>
                 <span role="img" aria-label="moneybag">
                   💰
                 </span>
                 <strong>{formatDecimal(profileData?.tradeVolumeUsd)}</strong>
-                <span>Total traded volume</span>
+                <Loader isLoading={isLoading}>
+                  <span>Total traded volume</span>
+                </Loader>
               </FlexCol>
             </FlexWrap>
           </ChildWrapper>
@@ -117,14 +137,18 @@ export default function Profile() {
                   🤝
                 </span>
                 <strong>{formatInt(profileData?.totalReferrals)}</strong>
-                <span>Total referrals</span>
+                <Loader isLoading={isLoading}>
+                  <span>Total referrals</span>
+                </Loader>
               </FlexCol>
               <FlexCol>
                 <span role="img" aria-label="wingedmoney">
                   💸
                 </span>
                 <strong>{formatDecimal(profileData?.referralVolumeUsd)}</strong>
-                <span>Referrals volume</span>
+                <Loader isLoading={isLoading}>
+                  <span>Referrals volume</span>
+                </Loader>
               </FlexCol>
             </FlexWrap>
           </ChildWrapper>
@@ -174,3 +198,37 @@ const formatDecimal = (number?: number): string => {
 const formatInt = (number?: number): string => {
   return number ? number.toLocaleString() : '-'
 }
+
+const Loader = styled.div<{ isLoading: boolean }>`
+  ${({ theme, isLoading }) =>
+    isLoading &&
+    css`
+      position: relative;
+      display: inline-block;
+
+      overflow: hidden;
+      &::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+        background-image: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0,
+          ${theme.shimmer1} 20%,
+          ${theme.shimmer2} 60%,
+          rgba(255, 255, 255, 0)
+        );
+        animation: shimmer 2s infinite;
+        content: '';
+      }
+
+      @keyframes shimmer {
+        100% {
+          transform: translateX(100%);
+        }
+      }
+    `}
+`

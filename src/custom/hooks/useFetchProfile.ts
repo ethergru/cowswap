@@ -3,22 +3,50 @@ import { useEffect, useState } from 'react'
 import { getProfileData } from 'api/gnosisProtocol'
 import { ProfileData } from 'api/gnosisProtocol/api'
 
-export default function useFetchProfile() {
+type FetchProfileState = {
+  profileData: ProfileData | null
+  error: string
+  isLoading: boolean
+}
+
+const emptyState: FetchProfileState = {
+  profileData: null,
+  error: '',
+  isLoading: false,
+}
+
+const FETCH_INTERVAL_IN_MINUTES = 5
+
+export default function useFetchProfile(): FetchProfileState {
   const { account, chainId } = useActiveWeb3React()
-  const [profileData, setProfileData] = useState<ProfileData | null>(null)
+  const [profile, setProfile] = useState<FetchProfileState>(emptyState)
 
   useEffect(() => {
+    setProfile({ ...emptyState, isLoading: true })
     async function fetchAndSetProfileData() {
-      if (chainId && account) {
+      if (!chainId || !account) {
+        setProfile((prevState: FetchProfileState) => {
+          return { ...prevState, isLoading: false }
+        })
+        return
+      }
+
+      try {
         const profileData = await getProfileData(chainId, account)
-        setProfileData(profileData)
-      } else {
-        setProfileData(null)
+        setProfile((prevState: FetchProfileState) => {
+          return { ...prevState, isLoading: false, profileData }
+        })
+      } catch (e) {
+        setProfile((prevState: FetchProfileState) => {
+          return { ...prevState, isLoading: false, error: 'Error getting profileData' }
+        })
       }
     }
 
-    fetchAndSetProfileData()
+    const intervalId = setInterval(fetchAndSetProfileData, FETCH_INTERVAL_IN_MINUTES * 60_000)
+
+    return () => clearInterval(intervalId)
   }, [account, chainId])
 
-  return profileData
+  return profile
 }
